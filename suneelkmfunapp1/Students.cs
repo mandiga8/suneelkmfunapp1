@@ -24,12 +24,26 @@ namespace suneelkmfunapp1
 
         [FunctionName("GetStudent")]
         public static IActionResult GetStudent(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route =null)] HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
         {
             try
             {
                 int studentID = Int32.Parse(req.GetQueryParameterDictionary()["id"]?.ToString() ?? "0");
                 return new OkObjectResult(MyStudents().Find(obj1 => obj1.ID == studentID));
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [FunctionName("GetFirstStudent")]
+        public static IActionResult GetFirstStudent(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+        {
+            try
+            {
+                return new OkObjectResult(MyStudents()[0]);
             }
             catch (Exception ex)
             {
